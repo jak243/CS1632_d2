@@ -2,7 +2,7 @@ require_relative "location"
 
 class Driver
   attr_accessor :name, :location, :books, :classes, :dinos
-  def initialize(name, location, books, classes, dinos)
+  def initialize(name, location)
     @name = name
     @location = location
     if location.class?
@@ -24,8 +24,9 @@ class Driver
 
 
   def move(prng)
-    valid_locs = @location.adj_locations
-    @location = valid_locs[prng.rand(valid_locs.size)]
+    valid_locs, valid_roads = @location.adj_locations
+    randIndex = prng.rand(valid_locs.size)
+    @location = valid_locs[randIndex]
     if @location.class?
       @classes = @classes*2
     end
@@ -35,8 +36,6 @@ class Driver
     if @location.dinos?
       @dinos += 1
     end
-    return @location
+    return @location, valid_roads[randIndex]
   end
-
-
 end
