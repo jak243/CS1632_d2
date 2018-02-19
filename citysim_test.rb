@@ -22,8 +22,8 @@ class RoadTest < Minitest::Test
   # current = two way road location with valid adjacent locations in negative direction -> returns array of valid adjacent location in negative directions
   # current = two way road location with valid adjacent locations in positive direction -> returns array of valid adjacent location in positive directions
   # current = one way road location with valid adjacent locations in both directions -> returns array of valid adjacent locations in only the forward direction
-  # current = one way road location with valid adjacent locations in the forward directions -> returns array of valid adjacent locations in only the forward direction
-  # current = one way road location with valid adjacent locations in the backward direction -> returns nil
+  # current = one way road location with valid adjacent locations in the positive directions -> returns array of valid adjacent location in only the pos direction
+  # current = one way road location with valid adjacent locations in the negative direction -> returns nil
 
 
   #If an invalid object, such as a string, is given for current
@@ -72,4 +72,46 @@ class RoadTest < Minitest::Test
     @r.locations = Array::new [location1,location2,location3,location4]
     assert_equal [location2], @r.adj_locations(location1)
   end
+  #If a one way road location with valid locations in both directions will return array of one valid location in the pos direction
+  def test_road_adj_location_with_adj_locations_1way
+    location1 = Location::new
+    location2 = Location::new
+    location3 = Location::new
+    location4 = Location::new
+    @r.oneway = true
+    @r.locations = Array::new [location1,location2,location3,location4]
+    assert_equal [location3], @r.adj_locations(location2)
+  end
+  #If a two way road location with valid locations in positive direction only will return array of one valid location in positice direction
+  def test_road_adj_location_with_adj_location_1way_pos
+    location1 = Location::new
+    location2 = Location::new
+    location3 = Location::new
+    location4 = Location::new
+    @r.oneway = true
+    @r.locations = Array::new [location1,location2,location3,location4]
+    assert_equal [location2], @r.adj_locations(location1)
+  end
+  #If a two way road location with valid locations in positive direction will return nil
+  def test_road_adj_location_with_adj_location_1way_neg
+    location1 = Location::new
+    location2 = Location::new
+    location3 = Location::new
+    location4 = Location::new
+    @r.oneway = true
+    @r.locations = Array::new [location1,location2,location3,location4]
+    assert_nil @r.adj_locations(location4)
+  end
+end
+
+class LocationTest < Minitest::Test
+  def setup
+    @l = Location::new
+  end
+
+  def test_new_location_not_nil
+    refute_nil @l
+    assert_kind_of Location, @l
+  end
+
 end
