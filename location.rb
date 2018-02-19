@@ -40,7 +40,7 @@ class Location
     end
     if ret_locs.empty?
       return nil
-    end 
+    end
     return ret_locs, ret_roads
   end
 end
