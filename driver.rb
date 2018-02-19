@@ -29,7 +29,11 @@ class Driver
     if !prng.is_a? Random
       raise "Not a valid pseudorandom number generator"
     end
-    valid_locs, valid_roads = @location.adj_locations
+    adj = @location.adj_locations
+    if adj.nil?
+      return nil
+    end
+    valid_locs, valid_roads = adj
     randIndex = prng.rand(valid_locs.size)
     @location = valid_locs[randIndex]
     if @location.class?

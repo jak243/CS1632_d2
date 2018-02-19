@@ -2,7 +2,7 @@ require_relative "location"
 
 class Road
   attr_accessor :name, :oneway, :locations
-  def initialize (name, oneway, locations = nil)
+  def initialize (name = nil, oneway = nil, locations = nil)
     @name = name
     @oneway = oneway
     @locations = locations

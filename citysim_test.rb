@@ -226,6 +226,7 @@ class DriverTest < Minitest::Test
   # if the driver moves to a location that offers dinos -> the number of dinos the driver has obtained increases by one
 
   #prng is not a valid pseudorandom number generator -> raises "Not a valid pseudorandom number generator"
+  #EDGE CASE
   def test_move_invalid_prng
     assert_raises "Not a valid pseudorandom number generator" do
       d1 = Driver::new nil,nil
@@ -233,12 +234,140 @@ class DriverTest < Minitest::Test
     end
   end
 
-  # if there are valid adjacent roads -> @location is set to a pseudorandom one and the method returns @location and the road at the same index
+  # @location.adj_locations returns nil -> returns nil
+  #EDGE CASE
   def test_move_nil_adj_locations
-    assert_raises "Not a valid pseudorandom number generator" do
-      d1 = Driver::new nil,nil
-      d1.move("silly-snake")
+    prng = Minitest::Mock.new("prng mock")
+    def prng.is_a?(thing)
+      true
     end
+    def prng.rand(number)
+      0
+    end
+    curr_loc = Minitest::Mock.new("mock current location")
+
+    def curr_loc.adj_locations
+      return nil
+    end
+    @d.location = curr_loc
+
+    assert_nil @d.move(prng)
+    assert_equal curr_loc, @d.location
   end
 
+  # if there are valid adjacent roads -> @location is set to a pseudorandom one and the method returns @location and the road at the same index
+  def test_move_valid_adj_locations
+    prng = Minitest::Mock.new("prng mock")
+    def prng.is_a?(thing)
+      true
+    end
+    def prng.rand(number)
+      0
+    end
+    curr_loc = Minitest::Mock.new("mock current location")
+    @@new_loc = Minitest::Mock.new("mock new location")
+    def @@new_loc.class?
+      false
+    end
+    def @@new_loc.books?
+      false
+    end
+    def @@new_loc.dinos?
+      false
+    end
+    def curr_loc.adj_locations
+      return [@@new_loc,"loc3"],["road_used","r3"]
+    end
+    @d.location = curr_loc
+
+    assert_equal [@@new_loc,"road_used"], @d.move(prng)
+    assert_equal @@new_loc, @d.location
+  end
+
+  # if the driver moves to a location that offers classes -> the number of classes the driver has taken doubles
+  def test_move_classes_at_new_location
+    prng = Minitest::Mock.new("prng mock")
+    def prng.is_a?(thing)
+      true
+    end
+    def prng.rand(number)
+      0
+    end
+    curr_loc = Minitest::Mock.new("mock current location")
+    @@new_loc = Minitest::Mock.new("mock new location")
+    @d.classes = 4
+    def @@new_loc.class?
+      true
+    end
+    def @@new_loc.books?
+      false
+    end
+    def @@new_loc.dinos?
+      false
+    end
+    def curr_loc.adj_locations
+      return [@@new_loc,"loc3"],["road_used","r3"]
+    end
+    @d.location = curr_loc
+    @d.move(prng)
+    assert_equal 8,@d.classes
+  end
+
+  # if the driver moves to a location that offers books -> the number of books the driver has obtained increases by one
+  def test_move_books_at_new_location
+    prng = Minitest::Mock.new("prng mock")
+    def prng.is_a?(thing)
+      true
+    end
+    def prng.rand(number)
+      0
+    end
+    curr_loc = Minitest::Mock.new("mock current location")
+    @@new_loc = Minitest::Mock.new("mock new location")
+    @d.books = 4
+    def @@new_loc.class?
+      false
+    end
+    def @@new_loc.books?
+      true
+    end
+    def @@new_loc.dinos?
+      false
+    end
+    def curr_loc.adj_locations
+      return [@@new_loc,"loc3"],["road_used","r3"]
+    end
+    @d.location = curr_loc
+    @d.move(prng)
+    assert_equal 5,@d.books
+  end
+
+  # if the driver moves to a location that offers dinos -> the number of dinos the driver has obtained increases by one
+  def test_move_dinos_at_new_location
+    prng = Minitest::Mock.new("prng mock")
+    def prng.is_a?(thing)
+      true
+    end
+    def prng.rand(number)
+      0
+    end
+    curr_loc = Minitest::Mock.new("mock current location")
+    @@new_loc = Minitest::Mock.new("mock new location")
+    @d.dinos = 4
+    def @@new_loc.class?
+      false
+    end
+    def @@new_loc.books?
+      false
+    end
+    def @@new_loc.dinos?
+      true
+    end
+    def curr_loc.adj_locations
+      return [@@new_loc,"loc3"],["road_used","r3"]
+    end
+    @d.location = curr_loc
+    @d.move(prng)
+    assert_equal 5,@d.dinos
+  end
 end
