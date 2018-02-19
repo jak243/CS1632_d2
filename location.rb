@@ -23,9 +23,24 @@ class Location
   end
 
   def adj_locations
+    if @roads.nil?
+      return nil
+    end
+
+    if @roads.empty?
+      return nil
+    end
     ret_locs = Array::new
     ret_roads = Array::new
-    roads.each{|road|  road.adj_locations(self).each{|x| ret_locs << x; ret_roads << road}}
+
+    roads.each do |road|
+      if !road.adj_locations(self).nil?
+        road.adj_locations(self).each{|x| ret_locs << x; ret_roads << road}
+      end
+    end
+    if ret_locs.empty?
+      return nil
+    end 
     return ret_locs, ret_roads
   end
 end

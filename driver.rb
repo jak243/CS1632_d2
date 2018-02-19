@@ -5,25 +5,30 @@ class Driver
   def initialize(name, location)
     @name = name
     @location = location
-    if location.class?
-      @classes = 2
-    else
-      @classes = 1
-    end
-    if location.books?
-      @books = 1
-    else
-      @books = 0
-    end
-    if location.dinos?
-      @dinos = 1
-    else
-      @dinos = 0
+    if !location.nil?
+      if location.class?
+        @classes = 2
+      else
+        @classes = 1
+      end
+      if location.books?
+        @books = 1
+      else
+        @books = 0
+      end
+      if location.dinos?
+        @dinos = 1
+      else
+        @dinos = 0
+      end
     end
   end
 
 
   def move(prng)
+    if !prng.is_a? Random
+      raise "Not a valid pseudorandom number generator"
+    end
     valid_locs, valid_roads = @location.adj_locations
     randIndex = prng.rand(valid_locs.size)
     @location = valid_locs[randIndex]
