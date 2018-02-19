@@ -18,7 +18,7 @@ class Road
     index = @locations.index(current)
     if !@oneway && !@locations[index-1].nil? && !@locations[index+1].nil? && index != 0
       return Array::new [@locations[index+1], @locations[index-1]]
-    elsif @oneway || @locations[index-1].nil?
+    elsif @oneway || index == 0 
       return Array::new [@locations[index+1]]
     else
       return Array::new [@locations[index-1]]
