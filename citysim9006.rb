@@ -3,7 +3,7 @@ require_relative "location"
 require_relative "driver"
 
 if ARGV.size != 1
-  abort "You must provide a single integer as a seed. Exiting..."
+  abort "You must provide a single integer as a seed."
 end
 
 prng = Random::new ARGV[0].to_i
@@ -42,17 +42,17 @@ drivers.each do |driver|
     next_location, via_road = driver.move(prng)
     puts driver.name+" heading from "+curr_location.name+" to "+next_location.name+" via "+via_road.get_name
   end
-  if driver.books ==1
+  if driver.books == 1
     puts driver.name+" obtained #{driver.books} book!"
   else
     puts driver.name+" obtained #{driver.books} books!"
   end
-  if driver.dinos ==1
+  if driver.dinos == 1
     puts driver.name+" obtained #{driver.dinos} dinosaur toy!"
   else
     puts driver.name+" obtained #{driver.dinos} dinosaur toys!"
   end
-  if driver.classes ==1
+  if driver.classes == 1
     puts driver.name+" attended #{driver.classes} class!"
   else
     puts driver.name+" attended #{driver.classes} classes!"

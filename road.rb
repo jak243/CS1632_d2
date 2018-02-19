@@ -9,6 +9,12 @@ class Road
   end
 
   def adj_locations(current)
+    if !current.is_a? Location
+      return nil
+    end
+    if @locations.size <= 1
+      return nil
+    end
     index = @locations.index(current)
     if !@oneway && !@locations[index-1].nil? && !@locations[index+1].nil? && index != 0
       return Array::new [@locations[index+1], @locations[index-1]]
@@ -19,7 +25,4 @@ class Road
     end
   end
 
-  def get_name
-    return @name
-  end
 end

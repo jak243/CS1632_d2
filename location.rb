@@ -2,7 +2,7 @@ require_relative "road"
 class Location
   attr_accessor :name, :roads, :classes, :books, :dinos
 
-  def initialize (name, roads = nil, classes, books, dinos)
+  def initialize (name = nil, roads = nil, classes = false, books = false, dinos = false)
     @name = name
     @roads = roads
     @classes = classes
